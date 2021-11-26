@@ -1,0 +1,31 @@
+{
+    "name": "nomala/statamic-google-places",
+    "description": "A Google Places addon for Statamic V3 for displaying Google Places on your website.",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Nomala\\StatamicGooglePlaces\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Julien Legrand",
+            "email": "julien@nomala.com"
+        }
+    ],
+    "require": {},
+    "extra": {
+        "statamic": {
+            "name": "Statamic Google Places",
+            "description": "Statamic Google Places addon",
+            "editions": [
+                "free"
+            ]
+        },
+        "laravel": {
+            "providers": [
+                "Nomala\\StatamicGooglePlaces\\StatamicGooglePlacesServiceProvider"
+            ]
+        }
+    }
+}
