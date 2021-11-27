@@ -20,12 +20,22 @@ class Place extends Tags
     }
 
     /**
-     * {{ place:nearby lat="value" lng="value" radius="value" }} ... {{ /place }}
+     * {{ place:find input="The text input specifying which place to search for" }} ... {{ /place:find }}
+     */
+    public function find()
+    {
+        if (!$input = $this->params->get('input')) {
+            return 'The text input specifying which place to search for is missing.';
+        }
+
+        return (new GooglePlaces())->findPlace($input);
+    }
+
+    /**
+     * {{ place:nearby lat="value" lng="value" radius="value" }} ... {{ /place:nearby }}
      */
     public function nearby()
     {
-        $photos = [];
-
         $lat = $this->params->get('lat');
         $lng = $this->params->get('lng');
         $radius = $this->params->get('radius');
@@ -36,26 +46,18 @@ class Place extends Tags
 
         $location = $lat . ',' .$lng;
 
-        $googlePlaces = new GooglePlaces();
-        $photos = $googlePlaces->nearbySearch($location, $radius);
-
-        return $photos;
+        return (new GooglePlaces())->nearbySearch($location, $radius);
     }
 
     /**
-     * {{ place:photos input="value" }} ... {{ /place }}
+     * {{ place:photos input="value" }} ... {{ /place:photos }}
      */
     public function photos()
     {
-        $photos = [];
-
         if (!$input = $this->params->get('input')) {
             return 'The text input specifying which place to search for is missing.';
         }
 
-        $googlePlaces = new GooglePlaces();
-        $photos = $googlePlaces->getPhotos($input);
-
-        return $photos;
+        return (new GooglePlaces())->getPhotos($input);
     }
 }

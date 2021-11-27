@@ -99,4 +99,22 @@ class GooglePlaces {
 
         return collect($places->all()['results']->all());       
     }
+
+    /**
+     * Find a place from search string.
+     *
+     * @param string $input
+     *
+     * @return \Illuminate\Support\Collection|null
+     */
+    public function findPlace($input)
+    {
+        $places = $this->placeApi->findPlace($input, 'textquery');
+
+        if (!$places->get('candidates')->count()) {
+            return null;
+        }
+
+        return collect(array_values($places->get('candidates')->all()));
+    }
 }
