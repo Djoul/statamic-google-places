@@ -8,7 +8,7 @@ use Statamic\Tags\Tags;
 class Place extends Tags
 {
     /**
-     * The {{ place }} tag.
+     * The {{ place  input="place to search" }} tag.
      *
      * Usage:
      * {{ place }}
@@ -33,8 +33,12 @@ class Place extends Tags
     {
         $photos = [];
 
+        if (!$input = $this->params->get('input')) {
+            return 'The text input specifying which place to search for is missing.';
+        }
+
         $googlePlaces = new GooglePlaces();
-        $photos = $googlePlaces->getPhotos('hotel recamier');
+        $photos = $googlePlaces->getPhotos($input);
 
         return $photos;
     }
