@@ -4,8 +4,8 @@ namespace Nomala\StatamicGooglePlaces;
 
 use SKAgarwal\GoogleApi\PlacesApi;
 
-class GooglePlaces {
-
+class GooglePlaces
+{
     /**
      * The PlacesApi object
      * @var SKAgarwal\GoogleApi\PlacesApi
@@ -37,12 +37,11 @@ class GooglePlaces {
 
         $placeIds = $this->findPlace($place, 'textquery');
 
-        if(!$placeIds) {
+        if (!$placeIds) {
             return null;
         }
 
         foreach ($placeIds as $placeId) {
-
             $placeDetails = $this->placeApi->placeDetails($placeId['place_id']);
 
             if (!$placeDetails) {
@@ -57,10 +56,9 @@ class GooglePlaces {
                     'photoUrl' => 'https://maps.googleapis.com/maps/api/place/photo?photoreference=' . $placePhoto['photo_reference'] . '&key=' . env('GOOGLE_MAPS_API_KEY', 'your-key') . '&maxheight=1000&maxwidth=600'
                 ];
             }
-
         }
 
-        return collect($photos);        
+        return collect($photos);
     }
 
     /**
@@ -75,11 +73,11 @@ class GooglePlaces {
     {
         $places = $this->placeApi->nearbySearch($location, $radius);
 
-        if(!isset($places->all()['results']) || !$places->all()['results']->count()) {
+        if (!isset($places->all()['results']) || !$places->all()['results']->count()) {
             return null;
         }
 
-        return collect($places->all()['results']->all());       
+        return collect($places->all()['results']->all());
     }
 
     /**
