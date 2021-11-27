@@ -29,17 +29,17 @@ class GooglePlaces {
      *
      * @param $place
      *
-     * @return \Illuminate\Support\Collection
+     * @return array
      */
     public function getPlaceIds($place)
     {
         $places = $this->placeApi->findPlace($place, 'textquery');
 
-        if (!$places) {
-            return;
+        if (!$places->get('candidates')->count()) {
+            return null;
         }
 
-        return $places->get('candidates')->all();
+        return array_values($places->get('candidates')->collapse()->all());
     }
 
     /**
@@ -47,7 +47,7 @@ class GooglePlaces {
      *
      * @param $place
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection|null
      */
     public function getPhotos($place)
     {
@@ -55,10 +55,19 @@ class GooglePlaces {
 
         $placeIds = $this->getPlaceIds($place);
 
+        if(!$placeIds) {
+            return null;
+        }
+
         foreach ($placeIds as $placeId) {
 
-            $placeDetails = $this->placeApi->placeDetails($placeId['place_id']);
-            $placePhotos = $placeDetails->all()['result']['photos'];
+            $placeDetails = $this->placeApi->placeDetails($placeId);
+
+            if (!$placeDetails) {
+                continue;
+            }
+
+            $placePhotos = isset($placeDetails->all()['result']['photos']) ? $placeDetails->all()['result']['photos'] : [];
 
             foreach ($placePhotos as $placePhoto) {
                 $photos[] = [
@@ -69,6 +78,6 @@ class GooglePlaces {
 
         }
 
-        return $photos;        
+        return collect($photos);        
     }
 }
