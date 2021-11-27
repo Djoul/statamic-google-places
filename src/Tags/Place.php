@@ -50,6 +50,18 @@ class Place extends Tags
     }
 
     /**
+     * {{ place:details place_id="Unique place identifier" }} ... {{ /place:details }}
+     */
+    public function details()
+    {
+        if (!$placeId = $this->params->get('place_id')) {
+            return 'The place identifier is missing.';
+        }
+
+        return (new GooglePlaces())->placeDetails($placeId);
+    }
+
+    /**
      * {{ place:photos input="value" }} ... {{ /place:photos }}
      */
     public function photos()

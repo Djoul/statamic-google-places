@@ -117,4 +117,23 @@ class GooglePlaces {
 
         return collect(array_values($places->get('candidates')->all()));
     }
+
+    /**
+     * Return a place details.
+     *
+     * @param string $placeId
+     *
+     * @return \Illuminate\Support\Collection|null
+     */
+    public function placeDetails($placeId)
+    {
+        $places = $this->placeApi->placeDetails($placeId);
+       
+
+        if (!count($places->get('result'))) {
+            return null;
+        }
+
+        return collect($places->get('result'));
+    }
 }
