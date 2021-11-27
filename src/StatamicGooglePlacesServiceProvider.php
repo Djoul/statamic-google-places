@@ -2,15 +2,17 @@
 
 namespace Nomala\StatamicGooglePlaces;
 
+//use SKAgarwal\GoogleApi\Providers\EventServiceProvider;
+use SKAgarwal\GoogleApi\ServiceProvider;
 use Statamic\Providers\AddonServiceProvider;
 
 class StatamicGooglePlacesServiceProvider extends AddonServiceProvider
 {
-    /*protected $tags = [
-        \Jezzdk\StatamicGooglePlaces\Tags\Map::class,
-        \Jezzdk\StatamicGooglePlaces\Tags\MapScript::class,
+    protected $tags = [
+        \Nomala\StatamicGooglePlaces\Tags\Place::class,
     ];
 
+    /*
     protected $scripts = [
         __DIR__ . '/../dist/js/map.js',
     ];
@@ -18,6 +20,8 @@ class StatamicGooglePlacesServiceProvider extends AddonServiceProvider
     protected $fieldtypes = [
         \Jezzdk\StatamicGoogleMaps\Fieldtypes\GoogleMap::class,
     ];*/
+
+    //SKAgarwal\GoogleApi\ServiceProvider::class,
 
     public function boot()
     {
@@ -29,6 +33,6 @@ class StatamicGooglePlacesServiceProvider extends AddonServiceProvider
 
     public function register()
     {
-        //
+        $this->app->register(ServiceProvider::class);
     }
 }

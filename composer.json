@@ -13,7 +13,9 @@
             "email": "julien@nomala.com"
         }
     ],
-    "require": {},
+    "require": {
+        "skagarwal/google-places-api": "^1.7"
+    },
     "extra": {
         "statamic": {
             "name": "Statamic Google Places",
