@@ -8,12 +8,7 @@ use Statamic\Tags\Tags;
 class Place extends Tags
 {
     /**
-     * The {{ place input="place to search" }} tag.
-     *
-     * Usage:
-     * {{ place }}
-     * 
-     * @return string|array
+     * {{ place }} ... {{ /place }}
      */
     public function index()
     {
@@ -25,9 +20,7 @@ class Place extends Tags
     }
 
     /**
-     * The {{ place:nearby lat="value" lng="value" radius="value" }} tag.
-     *
-     * @return \Illuminate\Support\Collection|string
+     * {{ place:nearby lat="value" lng="value" radius="value" }} ... {{ /place }}
      */
     public function nearby()
     {
@@ -50,9 +43,7 @@ class Place extends Tags
     }
 
     /**
-     * The {{ place:photos input="value" }} tag.
-     *
-     * @return string|array
+     * {{ place:photos input="value" }} ... {{ /place }}
      */
     public function photos()
     {
