@@ -8,7 +8,7 @@ use Statamic\Tags\Tags;
 class Place extends Tags
 {
     /**
-     * The {{ place  input="place to search" }} tag.
+     * The {{ place input="place to search" }} tag.
      *
      * Usage:
      * {{ place }}
@@ -25,7 +25,32 @@ class Place extends Tags
     }
 
     /**
-     * The {{ place:photos }} tag.
+     * The {{ place:nearby lat="value" lng="value" radius="value" }} tag.
+     *
+     * @return \Illuminate\Support\Collection|string
+     */
+    public function nearby()
+    {
+        $photos = [];
+
+        $lat = $this->params->get('lat');
+        $lng = $this->params->get('lng');
+        $radius = $this->params->get('radius');
+
+        if (!$lat || !$lng) {
+            return 'Please set both latitude and longitude';
+        }
+
+        $location = $lat . ',' .$lng;
+
+        $googlePlaces = new GooglePlaces();
+        $photos = $googlePlaces->nearbySearch($location, $radius);
+
+        return $photos;
+    }
+
+    /**
+     * The {{ place:photos input="value" }} tag.
      *
      * @return string|array
      */

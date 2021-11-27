@@ -80,4 +80,23 @@ class GooglePlaces {
 
         return collect($photos);        
     }
+
+    /**
+     * Search for places within a specified area.
+     *
+     * @param string $location
+     * @param int $radius
+     *
+     * @return \Illuminate\Support\Collection|null
+     */
+    public function nearbySearch($location, $radius = 500)
+    {
+        $places = $this->placeApi->nearbySearch($location, $radius);
+
+        if(!isset($places->all()['results']) || !$places->all()['results']->count()) {
+            return null;
+        }
+
+        return collect($places->all()['results']->all());       
+    }
 }
