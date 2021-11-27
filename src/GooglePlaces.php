@@ -25,24 +25,6 @@ class GooglePlaces {
     }
 
     /**
-     * Get all places id from the provided place string.
-     *
-     * @param $place
-     *
-     * @return array
-     */
-    public function getPlaceIds($place)
-    {
-        $places = $this->placeApi->findPlace($place, 'textquery');
-
-        if (!$places->get('candidates')->count()) {
-            return null;
-        }
-
-        return array_values($places->get('candidates')->collapse()->all());
-    }
-
-    /**
      * Get photos for a place.
      *
      * @param $place
@@ -53,7 +35,7 @@ class GooglePlaces {
     {
         $photos = [];
 
-        $placeIds = $this->getPlaceIds($place);
+        $placeIds = $this->findPlace($place, 'textquery');
 
         if(!$placeIds) {
             return null;
@@ -61,7 +43,7 @@ class GooglePlaces {
 
         foreach ($placeIds as $placeId) {
 
-            $placeDetails = $this->placeApi->placeDetails($placeId);
+            $placeDetails = $this->placeApi->placeDetails($placeId['place_id']);
 
             if (!$placeDetails) {
                 continue;
