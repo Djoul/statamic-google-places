@@ -12,11 +12,7 @@ class Place extends Tags
      */
     public function index()
     {
-        if (!env('GOOGLE_MAPS_API_KEY')) {
-            return 'Please add a GOOGLE_MAPS_API_KEY to the .env file';
-        }
-
-        return [];
+        return 'Hello place!';
     }
 
     /**

@@ -17,11 +17,11 @@ class GooglePlaces
      */
     public function __construct()
     {
-        if (!env('GOOGLE_MAPS_API_KEY')) {
+        if (!config('statamic.places.gmap_api_key')) {
             return 'Please add a GOOGLE_MAPS_API_KEY to the .env file';
         }
 
-        $this->placeApi = new PlacesApi(env('GOOGLE_MAPS_API_KEY', 'your-key'));
+        $this->placeApi = new PlacesApi(config('statamic.places.gmap_api_key'));
     }
 
     /**
@@ -53,7 +53,7 @@ class GooglePlaces
             foreach ($placePhotos as $placePhoto) {
                 $photos[] = [
                     'photo' => $placePhoto['photo_reference'],
-                    'photoUrl' => 'https://maps.googleapis.com/maps/api/place/photo?photoreference=' . $placePhoto['photo_reference'] . '&key=' . env('GOOGLE_MAPS_API_KEY', 'your-key') . '&maxheight=1000&maxwidth=600'
+                    'photoUrl' => 'https://maps.googleapis.com/maps/api/place/photo?photoreference=' . $placePhoto['photo_reference'] . '&key=' . config('statamic.places.gmap_api_key') . '&maxheight=1000&maxwidth=600'
                 ];
             }
         }

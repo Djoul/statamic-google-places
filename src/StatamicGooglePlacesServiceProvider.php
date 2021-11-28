@@ -2,7 +2,6 @@
 
 namespace Nomala\StatamicGooglePlaces;
 
-//use SKAgarwal\GoogleApi\Providers\EventServiceProvider;
 use SKAgarwal\GoogleApi\ServiceProvider;
 use Statamic\Providers\AddonServiceProvider;
 
@@ -12,23 +11,22 @@ class StatamicGooglePlacesServiceProvider extends AddonServiceProvider
         \Nomala\StatamicGooglePlaces\Tags\Place::class,
     ];
 
-    /*
-    protected $scripts = [
-        __DIR__ . '/../dist/js/map.js',
-    ];
-
-    protected $fieldtypes = [
-        \Jezzdk\StatamicGoogleMaps\Fieldtypes\GoogleMap::class,
-    ];*/
-
-    //SKAgarwal\GoogleApi\ServiceProvider::class,
-
     public function boot()
     {
-        /*$this->externalScripts = [
-            MapHelper::googleMapsScriptUrl()
-        ];*/
         parent::boot();
+
+        $this->bootAddonConfig();
+    }
+
+    protected function bootAddonConfig()
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/places.php', 'statamic.places');
+
+        $this->publishes([
+            __DIR__.'/../config/places.php' => config_path('statamic/places.php'),
+        ], 'places-config');
+
+        return $this;
     }
 
     public function register()

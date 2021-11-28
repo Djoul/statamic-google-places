@@ -9,6 +9,12 @@ You can install the package via composer:
 composer require :vendor_slug/:package_slug
 ```
 
+Optionally publish the config file of this package:
+
+```bash
+php artisan vendor:publish --provider="Nomala\StatamicGooglePlaces\StatamicGooglePlacesServiceProvider"
+```
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
