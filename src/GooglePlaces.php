@@ -8,17 +8,25 @@ class GooglePlaces
 {
     /**
      * The PlacesApi object
+     *
      * @var SKAgarwal\GoogleApi\PlacesApi
      */
     protected $placeApi;
+
+    /**
+     * The Google place API photo URL
+     *
+     * @var string
+     */
+    protected $photoUrl = 'https://maps.googleapis.com/maps/api/place/photo';
 
     /**
      * Request constructor.
      */
     public function __construct()
     {
-        if (!config('statamic.places.gmap_api_key')) {
-            return 'Please add a GOOGLE_MAPS_API_KEY to the .env file';
+        if (!config()->has('statamic.places.gmap_api_key') || !config('statamic.places.gmap_api_key')) {
+            return 'Please add a Google Maps API key in config [statamic.places.gmap_api_key]';
         }
 
         $this->placeApi = new PlacesApi(config('statamic.places.gmap_api_key'));
@@ -48,12 +56,13 @@ class GooglePlaces
                 continue;
             }
 
-            $placePhotos = isset($placeDetails->all()['result']['photos']) ? $placeDetails->all()['result']['photos'] : [];
+            $placePhotos = $placeDetails->all()['result']['photos'] ?? [];
 
             foreach ($placePhotos as $placePhoto) {
                 $photos[] = [
                     'photo' => $placePhoto['photo_reference'],
-                    'photoUrl' => 'https://maps.googleapis.com/maps/api/place/photo?photoreference=' . $placePhoto['photo_reference'] . '&key=' . config('statamic.places.gmap_api_key') . '&maxheight=1000&maxwidth=600'
+                    'photoUrl' => $this->photoUrl . '?photoreference=' . $placePhoto['photo_reference']
+                        . '&key=' . config('statamic.places.gmap_api_key') . '&maxheight=1000&maxwidth=600'
                 ];
             }
         }
