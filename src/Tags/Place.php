@@ -35,6 +35,7 @@ class Place extends Tags
         $lat = $this->params->get('lat');
         $lng = $this->params->get('lng');
         $radius = $this->params->get('radius');
+        $parameters = $this->params->get('parameters');
 
         if (!$lat || !$lng) {
             return 'Please set both latitude and longitude';
@@ -42,7 +43,7 @@ class Place extends Tags
 
         $location = $lat . ',' .$lng;
 
-        return (new GooglePlaces())->nearbySearch($location, $radius);
+        return (new GooglePlaces())->nearbySearch($location, $radius, $parameters);
     }
 
     /**

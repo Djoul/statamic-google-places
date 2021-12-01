@@ -78,9 +78,11 @@ class GooglePlaces
      *
      * @return \Illuminate\Support\Collection|null
      */
-    public function nearbySearch($location, $radius = 500)
+    public function nearbySearch($location, $radius = 500, $parameters = [])
     {
-        $places = $this->placeApi->nearbySearch($location, $radius);
+        $parameters = $this->prepareParameters($parameters);
+
+        $places = $this->placeApi->nearbySearch($location, $radius, $parameters);
 
         if (!isset($places->all()['results']) || !$places->all()['results']->count()) {
             return null;
@@ -117,12 +119,40 @@ class GooglePlaces
     public function placeDetails($placeId)
     {
         $places = $this->placeApi->placeDetails($placeId);
-       
 
         if (!count($places->get('result'))) {
             return null;
         }
 
         return collect($places->get('result'));
+    }
+
+    /**
+     * Prepare the parameters.
+     *
+     * @param $parameters
+     *
+     * @return mixed
+     */
+    private function prepareParameters($parameters)
+    {
+        $return = [];
+
+        if (is_string($parameters) == false || $parameters == '') {
+            return [];
+        }
+
+        $parameters = explode('&', $parameters);
+
+        if (count($parameters)) {
+            foreach ($parameters as $parameter) {
+                $data = explode('=', $parameter);
+                if (isset($data[0]) && !empty($data[0]) && isset($data[1]) && !empty($data[1])) {
+                    $return[$data[0]] = $data[1];
+                }
+            }
+        }
+        
+        return $return;
     }
 }
