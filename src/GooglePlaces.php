@@ -122,9 +122,11 @@ class GooglePlaces
      *
      * @return \Illuminate\Support\Collection|null
      */
-    public function placeDetails($placeId)
+    public function placeDetails($placeId, $parameters = [])
     {
-        $places = $this->placeApi->placeDetails($placeId);
+        $parameters = $this->prepareParameters($parameters);
+
+        $places = $this->placeApi->placeDetails($placeId, $parameters);
 
         if (!count($places->get('result'))) {
             return null;

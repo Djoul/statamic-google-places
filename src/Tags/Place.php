@@ -58,7 +58,9 @@ class Place extends Tags
             return 'The place identifier is missing.';
         }
 
-        return (new GooglePlaces())->placeDetails($placeId);
+        $parameters = $this->params->get('parameters');
+
+        return (new GooglePlaces())->placeDetails($placeId, $parameters);
     }
 
     /**
@@ -69,7 +71,7 @@ class Place extends Tags
         if (!$input = $this->params->get('input')) {
             return 'The text input specifying which place to search for is missing.';
         }
-        
+
         return (new GooglePlaces())->getPhotos($input);
     }
 }
