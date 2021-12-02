@@ -1,7 +1,7 @@
 # Statamic Google Places
 A Google Places addon for Statamic V3 for displaying Google Places on your website.
 
-## Installation
+# Installation
 
 You can install the package via composer:
 
@@ -21,70 +21,74 @@ Add an environment variable. Provide the Google API key that you want to use for
 GOOGLE_MAPS_API_KEY=""
 ```
 
-## Places Tags
+# Places Tags
 
 Insert one of the tags below into your antlers template.
 
-### place:find
+## Find place
 
 This tag takes a text input and return a place. See [Google's Official documentation](https://developers.google.com/maps/documentation/places/web-service/search-find-place) for more information. 
 
 NB: The input type 'textquery' is used by default and can't be modified.
 
 ```
-{{ place:find input="The text input specifying which place to search for" }} ... {{ /place:find }}
+{{ place:find }} ... {{ /place:find }}
 ```
 
-#### Parameter(s)
+### Parameter(s)
 
 * `input` — The text input specifying which place to search for (name or address).
+* `input_type` — The type of input - `textquery` or `phonenumber` (`textquery` is set as default).
+* `parameters` — Optional parameters - please see Google's Official documentation for more information on all the available parameters. All parameters are separated using the ampersand `&` character. 
 
-#### Example
+### Example
 
 ```php
-{{ place:find input="paris" }}
+{{ place:find input="paris" input_type="textquery" parameters="language=fr" }}
     {{ place_id }}
 {{ /place:find }}
 ```
 
-### place:nearby
+## Nearby Search
 
 Search for places within a specified area. See [Google's Official documentation](https://developers.google.com/maps/documentation/places/web-service/search-nearby) for more information. 
 
 ```
-{{ place:nearby lat="50.8549541" lng="4.3053504" radius="1000" }} ... {{ /place:nearby }}
+{{ place:nearby }} ... {{ /place:nearby }}
 ```
 
-#### Parameter(s)
+### Parameter(s)
 
 * `lat` — The latitude of the place.
 * `longitude` — The longitude of the place.
 * `radius` — Defines the distance (in meters) within which to return place results.
+* `parameters` — Optional parameters - please see Google's Official documentation for more information on all the available parameters. All parameters are separated using the ampersand `&` character. 
 
-#### Example
+### Example
 
 ```php
-{{ place:nearby lat="50.1488041" lng="5.6335469" radius="100" }}
+{{ place:nearby lat="40.6971494" lng="-74.2598655" radius="10000" parameters="type=doctor&rankby=distance" }}
     {{ name }}, {{ place_id }} <br>
 {{ /place:nearby }}
 ```
 
-### place:details
+## Place Details
 
 Request for details about a place. See [Google's Official documentation](https://developers.google.com/maps/documentation/places/web-service/details) for more information. 
 
 ```
-{{ place:details place_id="ChIJny45LXAmwkcR2dHbpmB1TFw" }} ... {{ /place:details }}
+{{ place:details }} ... {{ /place:details }}
 ```
 
-#### Parameter(s)
+### Parameter(s)
 
 * `place_id` — A textual identifier that uniquely identifies a place.
+* `parameters` — Optional parameters - please see Google's Official documentation for more information on all the available parameters. All parameters are separated using the ampersand `&` character.
 
-#### Example
+### Examples
 
 ```php
-{{ place:details place_id="ChIJQ_kGl9o4wEcRWTAF0xd-gNs" }}
+{{ place:details place_id="ChIJYeZuBI9YwokRjMDs_IEyCwo" parameters="fields=formatted_address,name,geometry&language=fr" }}
     {{ name }} <br>
     {{ geometry.location.lat }} <br>
     {{ geometry.location.lng }} <br>
@@ -92,27 +96,48 @@ Request for details about a place. See [Google's Official documentation](https:/
 {{ /place:details }}
 ```
 
-### place:photos
+To get the place ID and details:
+
+```php
+{{ place:find input="paris" }}
+    {{ place:details place_id="{ place_id }" }}
+        {{ name }} <br>
+        {{ formatted_address }}
+    {{ /place:details }}
+{{ /place:find }}
+```
+
+## Photos from search
 
 Request that return all the photos from a find search.
 
 ```
-{{ place:photos input="brussels" }} ... {{ /place:photos }}
+{{ place:photos }} ... {{ /place:photos }}
 ```
 
-#### Parameter(s)
+### Parameter(s)
 
 * `input` — The text input specifying which place to search for (name or address).
 
-#### Example
+### Example
 
 ```php
-{{ place:photos input="brussels" }}
+{{ place:photos input="Manhattan" }}
     {{ photo }} <br>,
     <img src="{{ photoUrl }}" /> <br>
 {{ /place:photos }}
 ```
 
-## License
+## Tips
+
+If you want to see all the available data inside a loop, use the `dump`tag.
+
+```php
+{{ place:photos input="Manhattan" }}
+    {{ dump }}
+{{ /place:photos }}
+```
+
+# License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
