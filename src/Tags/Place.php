@@ -24,7 +24,10 @@ class Place extends Tags
             return 'The text input specifying which place to search for is missing.';
         }
 
-        return (new GooglePlaces())->findPlace($input);
+        $inputType = $this->params->get('input_type');
+        $parameters = $this->params->get('parameters');
+
+        return (new GooglePlaces())->findPlace($input, $inputType, $parameters);
     }
 
     /**
@@ -66,7 +69,7 @@ class Place extends Tags
         if (!$input = $this->params->get('input')) {
             return 'The text input specifying which place to search for is missing.';
         }
-
+        
         return (new GooglePlaces())->getPhotos($input);
     }
 }

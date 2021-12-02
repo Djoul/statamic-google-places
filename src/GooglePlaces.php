@@ -75,6 +75,7 @@ class GooglePlaces
      *
      * @param string $location
      * @param int $radius
+     * @param array|string $parameters
      *
      * @return \Illuminate\Support\Collection|null
      */
@@ -95,12 +96,17 @@ class GooglePlaces
      * Find a place from search string.
      *
      * @param string $input
+     * @param string $inputType (textquery or phonenumber)
+     * @param array|string $parameters
      *
      * @return \Illuminate\Support\Collection|null
      */
-    public function findPlace($input)
+    public function findPlace($input, $inputType, $parameters = [])
     {
-        $places = $this->placeApi->findPlace($input, 'textquery');
+        $inputType = $inputType ?: 'textquery';
+        $parameters = $this->prepareParameters($parameters);
+
+        $places = $this->placeApi->findPlace($input, $inputType, $parameters);
 
         if (!$places->get('candidates')->count()) {
             return null;
