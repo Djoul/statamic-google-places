@@ -2,6 +2,7 @@
 
 namespace Nomala\StatamicGooglePlaces;
 
+use Exception;
 use SKAgarwal\GoogleApi\PlacesApi;
 
 class GooglePlaces
@@ -45,8 +46,8 @@ class GooglePlaces
 
         $placeIds = $this->findPlace($place, 'textquery');
 
-        if (!$placeIds) {
-            return null;
+        if (!($placeIds) || is_string($placeIds)) {
+            return $placeIds;
         }
 
         foreach ($placeIds as $placeId) {
@@ -83,13 +84,17 @@ class GooglePlaces
     {
         $parameters = $this->prepareParameters($parameters);
 
-        $places = $this->placeApi->nearbySearch($location, $radius, $parameters);
+        try {
+            $places = $this->placeApi->nearbySearch($location, $radius, $parameters);
 
-        if (!isset($places->all()['results']) || !$places->all()['results']->count()) {
-            return null;
+            if (!isset($places->all()['results']) || !$places->all()['results']->count()) {
+                return null;
+            }
+
+            return collect($places->all()['results']->all());
+        } catch (Exception $e) {
+            return $e->getMessage();
         }
-
-        return collect($places->all()['results']->all());
     }
 
     /**
@@ -106,13 +111,17 @@ class GooglePlaces
         $inputType = $inputType ?: 'textquery';
         $parameters = $this->prepareParameters($parameters);
 
-        $places = $this->placeApi->findPlace($input, $inputType, $parameters);
+        try {
+            $places = $this->placeApi->findPlace($input, $inputType, $parameters);
 
-        if (!$places->get('candidates')->count()) {
-            return null;
+            if (!$places->get('candidates')->count()) {
+                return null;
+            }
+    
+            return collect(array_values($places->get('candidates')->all()));
+        } catch (Exception $e) {
+            return $e->getMessage();
         }
-
-        return collect(array_values($places->get('candidates')->all()));
     }
 
     /**
@@ -126,13 +135,17 @@ class GooglePlaces
     {
         $parameters = $this->prepareParameters($parameters);
 
-        $places = $this->placeApi->placeDetails($placeId, $parameters);
+        try {
+            $places = $this->placeApi->placeDetails($placeId, $parameters);
 
-        if (!count($places->get('result'))) {
-            return null;
+            if (!count($places->get('result'))) {
+                return null;
+            }
+
+            return collect($places->get('result'));
+        } catch (Exception $e) {
+            return $e->getMessage();
         }
-
-        return collect($places->get('result'));
     }
 
     /**
