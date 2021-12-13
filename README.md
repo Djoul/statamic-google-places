@@ -27,9 +27,7 @@ Insert one of the tags below into your antlers template.
 
 ## Find place
 
-This tag takes a text input and return a place. See [Google's Official documentation](https://developers.google.com/maps/documentation/places/web-service/search-find-place) for more information. 
-
-NB: The input type 'textquery' is used by default and can't be modified.
+This tag takes a text input and return a place. See [Google's Official documentation](https://developers.google.com/maps/documentation/places/web-service/search-find-place) for more information.
 
 ```
 {{ place:find }} ... {{ /place:find }}
